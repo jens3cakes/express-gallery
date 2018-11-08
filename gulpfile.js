@@ -1,6 +1,6 @@
-var browserSync = require('browser-sync');
 var gulp = require('gulp');
 var scss = require('gulp-sass');
+var browserSync = require('browser-sync');
 
 browserSync.init({
     proxy: `localhost:${process.env.EXPRESS_CONTAINER_PORT}`

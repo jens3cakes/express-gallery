@@ -10,10 +10,10 @@ app.use(express.static('public'));
 
 // app.use('/photo_gallery', photoGalleryRouter)
 // app.use('/users', userRouter)
-app.get('/', (req, res)=>{
-  console.log('hello')
-  res.send('hello')
-})
+// app.get('/', (req, res)=>{
+//   console.log('hello')
+//   res.send('hello')
+// })
 app.engine('hbs',exphbs({
   defaultLayout: 'main',
   extname: 'hbs'

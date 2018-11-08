@@ -1,6 +1,6 @@
 version: '3'
 services:
-  express-server:
+  express-gallery:
     image: ${DOCKERHUB_NAME}/${IMAGE_NAME}:${IMAGE_VERSION}-local
     depends_on:
       - postgres-primary-db
