@@ -6,7 +6,8 @@ const photoGalleryRouter = require('./routes/photo_gallery');
 const userRouter = require('./routes/users')
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(express.static('public'));
+
 // app.use('/photo_gallery', photoGalleryRouter)
 // app.use('/users', userRouter)
 app.get('/', (req, res)=>{
@@ -18,6 +19,8 @@ app.engine('hbs',exphbs({
   extname: 'hbs'
 })),
 app.set('view engine', 'hbs');
+
+app.use(bodyParser.urlencoded({extended:true}))
 app.use('/photo_gallery', photoGalleryRouter);
 app.use('/users', userRouter);
 
