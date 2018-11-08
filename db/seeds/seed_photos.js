@@ -28,7 +28,13 @@ exports.seed = function (knex, Promise) {
         },
         {
           author: 'Elon Musk',
-          description: ''
+          description: 'Tesla Roadster',
+          link: 'https://cdn.vox-cdn.com/thumbor/pPzC2mitW59SkkeVb6XhuIZG8ps=/0x0:1192x866/920x613/filters:focal(501x338:691x528):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/58088359/Screen_Shot_2017_12_22_at_2.22.54_PM.0.png',
+          author_id: 5
+        },
+        {
+        author: 'Pusheen Cat',
+        description: 'MermaCat'
         }
       ]);
     });

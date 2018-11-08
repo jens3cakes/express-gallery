@@ -19,7 +19,11 @@ router.get('/:id', (req,res) => {
   })
   .then(users => {
     if(users !== null){
-      res.json(users);
+     
+      const locals = users.serialize();
+     
+      res.render('users/detail', locals);
+      // res.json(users);
     }else if(users === null || users === []){
       res.status(404).send(`User ${data} not found.`)
     }
