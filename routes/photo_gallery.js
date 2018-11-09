@@ -10,6 +10,22 @@ router.get('/', (req,res) => {
   .catch(err => console.log(err))
 });
 
+router.get('/:id', (req, res) =>{
+  let data = req.params.id;
+  return new Photo().where({id:parseInt(data)})
+  .fetch({})
+  .then((photo) => {
+    if(photo !== null){
+      const locals = photo.serialize();
+      res.render('galleries/detail', locals);
+    }else if(photo === null || photo === []){
+      res.status(404).send(`User ${data} not found.`)
+    }
+  })
+  .catch(err => console.log(err))
+});
+
+
 router.post('/', (req, res) => {
   let data = req.body;
 

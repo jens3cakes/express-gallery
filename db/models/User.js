@@ -2,11 +2,12 @@ const bookshelf = require('./bookshelf');
 //const posts = require('./Posts') not needed beacuse of registry instanciation
 
 
-class User extends bookshelf.Model{
+class User extends bookshelf.Model {
+
+  get tableName() { return 'users' }
+  get hasTimestamps() { return true }
   
-  get tableName(){return 'users'}
-  get hasTimestamps(){return true}
-  posts(){
+  posts() {
     return this.hasMany('Photo', 'author_id');
   }
 

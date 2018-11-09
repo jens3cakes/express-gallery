@@ -14,12 +14,10 @@ router.get('/:id', (req,res) => {
   let data = req.params.id;
   return new User().where({id:parseInt(data)})
   .fetch({
-    colums: ['id', 'first_name', 'email'],
-    withRelated: ['posts']
+     withRelated: 'posts'
   })
   .then(users => {
     if(users !== null){
-     
       const locals = users.serialize();
      
       res.render('users/detail', locals);
