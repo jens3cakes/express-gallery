@@ -10,7 +10,17 @@ class User extends bookshelf.Model {
   posts() {
     return this.hasMany('Photo', 'author_id');
   }
+   
+  
 
 }
 
-module.exports = bookshelf.model('User', User);
+
+module.exports = 
+  bookshelf.model ('User', User)
+  //(userObj, cb) {
+    //   let user = users.find(user => userObj.username === user.username);
+    //   if(user) {
+    //     return cb(null, user);
+    //   }
+    //   return cb(null);
