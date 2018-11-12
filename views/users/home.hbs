@@ -1,1 +1,30 @@
-<a href="{{link}}"><img src="{{link}}" alt="" srcset=""></a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Photo Gallery Users List</title>
+</head>
+<body>
+<h1>Photo Gallery Users List</h1>
+<div>
+  <ul>
+    {{#each users}}
+    <li class="firstName">{{first_name}}</li>
+    <li class="lastName">{{last_name}}</li>
+    <ul class="photos">
+      {{#each posts}}
+      <li class="photo"><a href="{{link}}"><img src="{{link}}" alt="" srcset=""></a></li>
+      {{/each}}
+    </ul>
+    {{/each}}
+  </ul>
+</div>
+
+
+  
+</body>
+</html>
+
+

@@ -3,12 +3,25 @@ const User = require('../db/models/User');
 const router = express.Router();
 
 router.get('/', (req,res) =>{
-  return User.fetchAll()
+  return User.fetchAll({
+    withRelated: 'posts'
+  })
   .then(users => {
-    res.json(users);
+    //res.json(users);
+    res.redirect('/views/users/home.hbs')
   })
   .catch(err => console.log(err))
 });
+
+router.get('/views/users/home.hbs', (req, res) => {
+  console.log(1)
+  return User.fetchAll({
+    withRelated: 'posts'
+  })
+  .then(users => {
+    res.json(users)
+  })
+})
 
 router.get('/:id', (req,res) => {
   let data = req.params.id;
@@ -29,13 +42,15 @@ router.get('/:id', (req,res) => {
   .catch(err => console.log(err))
 });
 
-router.post('/', (req, res) =>{
+router.post('/register.html', (req, res) =>{
   let data = req.body;
 
   return new User({
     first_name: data.first_name,
     last_name: data.last_name,
     email: data.email,
+    username:data.username,
+    password: data.password
   })
   .save()
   .then(user => {

@@ -11,7 +11,10 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const utility = require('./utilities/auth');
+const bcrypt = require('bcrypt');
+const redis = require('connect-redis')(session);
 
+const saltRounds = 12;
 app.use(express.static('public'));
 
 app.engine('hbs', exphbs({
@@ -25,6 +28,8 @@ app.use('/photo_gallery', photoGalleryRouter);
 app.use('/users', userRouter);
 
 app.use(session({
+  store: new redis({url: 'redis://redis-server:6379', logErrors:
+true}),
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false
@@ -52,33 +57,66 @@ passport.deserializeUser((userId, cb) => {
 
 passport.use(new LocalStrategy((username, password, done) => {
   new User()
+  
     .where({ username })
     .fetch()
     .then(user => {
+      
       if (!user) {
         return done(null, false, { message: `Incorrect username/password` });
       }
-      let userObj = user.serialize()
-      if (userObj.password !== password) {
-        return done(null, false, { message: `Incorrect password/username` });
+      else{
+        bcrypt.compare(password, user.password)
+        .then(res => {
+          if(res) {return done(null, user);}
+          else{
+            return done(null, false, {message: 'bad username or password'})
+          }
+        });
       }
-      return done(null, userObj);
-    })
-    .catch(err => {
-      return done(err, null);
-    })
+    });
 }));
 
 app.get('/', (req, res) => {
-  res.redirect('')
+  res.redirect('/register.html')
 });
+
+// app.get('/register', (req, res) => {
+//   res.redirect('/register.html')
+// });
+
+app.post('/register', passport.authenticate('local', {
+  successRedirect: '/edit',
+  failureRedirect: '/register.html'
+}));
+
+
+app.post('/register.html', (req, res)=> {
+  
+  bcrypt.genSalt(saltRounds, function(err, salt){
+    bcrypt.hash(req.body.password, salt, function(err, hash){
+      new User ({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        username: req.body.username,
+        password: hash
+      })
+      .save()
+      .then((user) => {
+        console.log(user);
+        res.redirect('/');
+      })
+    });
+  });
+});
+
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/edit',
   failureRedirect: '/login.html'
 }));
 
-app.get('/')
 
 app.get('/secret', utility.isAuthenticated, (req, res) => {
   const { user } = req;//the preferred way to deconstruct an object into a variable
@@ -89,10 +127,6 @@ app.get('/secret', utility.isAuthenticated, (req, res) => {
   res.send(`You have access to Photo Gallery ${userObj.username}`)
 });
 
-app.get('/edit', (req,res) => {
-  const user = req.user
-})
-
 app.get('/edit', utility.hasAdminAccess, (req, res) => {
   const user = req.user;
   const userObj = user.serialize();
@@ -100,9 +134,6 @@ app.get('/edit', utility.hasAdminAccess, (req, res) => {
   res.redirect('./views/galleries/edit')
 
 })
-
-
-
 
 app.listen(PORT, () => {
   console.log(`Server listening on PORT ${PORT}`);
