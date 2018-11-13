@@ -9,7 +9,7 @@
     "dev": "npx gulp & npx nodemon server.js",
     "db:migrate": "POSTGRES_HOSTNAME=localhost npx knex migrate:latest",
     "db:rollback": "POSTGRES_HOSTNAME=localhost npx knex migrate:rollback",
-    "seed": "POSTGRES_HOSTNAME=localhost POSTGRES_CONTAINER_PORT=5432 npx knex seed:run"
+    "db:seed": "POSTGRES_HOSTNAME=localhost POSTGRES_CONTAINER_PORT=5432 npx knex seed:run"
   },
   "repository": {
     "type": "git",

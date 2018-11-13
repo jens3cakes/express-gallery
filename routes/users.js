@@ -9,7 +9,7 @@ router.get('/', (req,res) =>{
   })
   .then(users => {
     //res.json(users);
-    res.redirect('/views/users/home')
+    res.redirect('/home')
   })
   .catch(err => console.log(err))
 });
@@ -43,22 +43,22 @@ router.get('/:id', (req,res) => {
   .catch(err => console.log(err))
 });
 
-router.post('/register.html', (req, res) =>{
-  let data = req.body;
+// router.post('/', (req, res) =>{
+//   let data = req.body;
 
-  return new User({
-    first_name: data.first_name,
-    last_name: data.last_name,
-    email: data.email,
-    username:data.username,
-    password: data.password
-  })
-  .save()
-  .then(user => {
-    return res.json(user);
-  })
-  .catch(err => console.log(err))
-});
+//   return new User({
+//     first_name: data.firstName,
+//     last_name: data.lastName,
+//     email: data.email,
+//     username:data.username,
+//     password: data.password
+//   })
+//   .save()
+//   .then(user => {
+//     return res.json(user);
+//   })
+//   .catch(err => console.log(err))
+// });
 
 router.put('/:id', (req, res) => {
   const id = req.params.id;

@@ -77,21 +77,11 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
-app.get('/', (req, res) => {
+app.get('/register', (req, res) => {
   res.redirect('/register.html')
 });
 
-// app.get('/register', (req, res) => {
-//   res.redirect('/register.html')
-// });
-
-app.post('/register', passport.authenticate('local', {
-  successRedirect: '/edit',
-  failureRedirect: '/register.html'
-}));
-
-
-app.post('/register.html', (req, res)=> {
+app.post('/register', (req, res)=> {
   
   bcrypt.genSalt(saltRounds, function(err, salt){
     bcrypt.hash(req.body.password, salt, function(err, hash){
@@ -105,15 +95,23 @@ app.post('/register.html', (req, res)=> {
       .save()
       .then((user) => {
         console.log(user);
-        res.redirect('/');
+        res.redirect('/home');
       })
     });
   });
 });
 
+app.post('/register', passport.authenticate('local', {
+  successRedirect: '/edit',
+  failureRedirect: '/register.html'
+}));
+
+
+
+
 
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/edit',
+  successRedirect: '/views/galleries/edit',
   failureRedirect: '/login.html'
 }));
 
