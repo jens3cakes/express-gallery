@@ -3,17 +3,18 @@ const User = require('../db/models/User');
 const router = express.Router();
 
 router.get('/', (req,res) =>{
+  
   return User.fetchAll({
     withRelated: 'posts'
   })
   .then(users => {
     //res.json(users);
-    res.redirect('/views/users/home.hbs')
+    res.redirect('/views/users/home')
   })
   .catch(err => console.log(err))
 });
 
-router.get('/views/users/home.hbs', (req, res) => {
+router.get('/home', (req, res) => {
   console.log(1)
   return User.fetchAll({
     withRelated: 'posts'
