@@ -11,37 +11,28 @@ exports.seed = function (knex, Promise) {
           last_name: 'Kitty',
           email: 'helloKitty@sanrio.com',
           username: 'hellok',
-          password: 'password'
+          password: '$2b$12$8htzXXdosQtcSQ0yloLTTuOt/cSKbHxPVHuaikpTUnZKWrw.5jLvq'
         },
         {
-          
           first_name: 'Pusheen',
           last_name: 'Cat',
           email: 'pusheenCat@irish',
           username: 'pusheenc',
-          password: 'password'
+          password: '$2b$12$8htzXXdosQtcSQ0yloLTTuOt/cSKbHxPVHuaikpTUnZKWrw.5jLvq'
         },
         {
-          
           first_name: 'Ansel',
           last_name: 'Adams',
           email: 'anselAdams@natgeo.com',
           username: 'ansela',
-          password: 'password'
-        },
-        {
-          first_name: 'Jennifer',
-          last_name: 'Brotchie',
-          email: 'jenniferBrotchie@gmail.com',
-          username: 'jenniferb',
-          password: 'password'
+          password: '$2b$12$8htzXXdosQtcSQ0yloLTTuOt/cSKbHxPVHuaikpTUnZKWrw.5jLvq'
         },
         {
           first_name: 'David',
           last_name: 'Brotchie',
           email: 'davidBrotchie@gmail.com',
           username: 'davidb',
-          password: 'password'
+          password: '$2b$12$8htzXXdosQtcSQ0yloLTTuOt/cSKbHxPVHuaikpTUnZKWrw.5jLvq'
         },
       ]);
     });

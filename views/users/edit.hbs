@@ -1,0 +1,8 @@
+<h1>Edit User Form</h1>
+<form action="/users/{{id}}?_method=PUT" method="post">
+  <input type="hidden" name="id" value="{{id}}">
+  <input type="text" name="firstName" id="firstName" value="{{first_name}}">
+  <input type="text" name="lastName" id="lastName" value="{{last_name}}">
+  <input type="text" name="username" id="username" value="{{username}}">
+  <button type="submit">Edit</button>
+</form>

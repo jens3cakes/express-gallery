@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Photo Gallery</title>
-</head>
 <body>
-  <div class=""></div>
-  {{#each photo}}
-  <li></li>
+  <h1>Photo Gallery</h1>
+  <div class="photoGallery">
+  
+  {{#each photoObj}}
+  <div>
+    <a href="{{link}}"><img src="{{link}}" alt="" srcset="">i</a>
+  </div>
+{{/each}}  
+</ul>
+</div>
 </body>
 </html>

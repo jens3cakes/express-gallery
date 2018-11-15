@@ -19,12 +19,6 @@ exports.seed = function (knex, Promise) {
           link: 'https://learn.canva.com/wp-content/uploads/2018/04/AnselAdamsPhotography4.jpg',
         },
         {
-          
-          author: 'Jennifer Brotchie',
-          description: 'Na Pali Coast',
-          link: 'https://jenniferbrotchie-hawaii-portfolio.com/napali-coast-kauai',
-        },
-        {
           author: 'David Brotchie',
           description: 'Electric Beach - turtle-',
           link: 'https://3.bp.blogspot.com/-xhLxIGFqdnY/Wzb5TPTqsqI/AAAAAAAAEeU/JZEpJYBRCIsW3pPHPyVHakH1Qc6rlXqDwCEwYBhgL/s640/Nikonos-3.jpg',

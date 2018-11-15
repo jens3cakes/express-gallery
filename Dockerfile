@@ -11,7 +11,7 @@ WORKDIR ${app_directory}
 COPY package.json .
 
 # Install node module dependencies
-RUN npm install --force
+RUN rm -Rf node_modules && npm install
 
 # Add the rest of the project files(most builds will start from here based on cache)
 COPY . .

@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const User = require('./db/models/User');
 const Photo = require('./db/models/Photo');
@@ -12,6 +12,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const utility = require('./utilities/auth');
 const bcrypt = require('bcrypt');
+const methodOverride = require('method-override');
 const redis = require('connect-redis')(session);
 
 const saltRounds = 12;
@@ -24,79 +25,91 @@ app.engine('hbs', exphbs({
   app.set('view engine', 'hbs');
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use('/photo_gallery', photoGalleryRouter);
-app.use('/users', userRouter);
+app.use(methodOverride('_method'))
+
 
 app.use(session({
-  store: new redis({url: 'redis://redis-server:6379', logErrors:
-true}),
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser((user, done) => {
-  done(null, user.id)
-});
-
-passport.deserializeUser((userId, cb) => {
-  console.log(userId)
-  return new User()
+  store: new redis({
+      url: 'redis://redis-server:6379', logErrors:
+        true
+    }),
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+  }));
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  passport.serializeUser((user, done) => {
+    done(null, user.id)
+  });
+  
+  passport.deserializeUser((userId, cb) => {
+    return new User()
     .where({ id: userId })
     .fetch()
     .then(user => {
       if (!user) {
         cb(null);
       }
-      cb(null, user);
+      cb(null, user.serialize());
     });
-});
-
-passport.use(new LocalStrategy((username, password, done) => {
-  new User()
+  });
   
+  passport.use(new LocalStrategy((username, password, done) => {
+    new User()
+    
     .where({ username })
     .fetch()
     .then(user => {
-      
       if (!user) {
         return done(null, false, { message: `Incorrect username/password` });
       }
-      else{
-        bcrypt.compare(password, user.password)
+      else {
+        let userObj = user.serialize();
+        bcrypt.compare(password, userObj.password)
         .then(res => {
-          if(res) {return done(null, user);}
-          else{
-            return done(null, false, {message: 'bad username or password'})
+          if (res) { return done(null, userObj); }
+          else {
+            return done(null, false, { message: 'bad username or password' })
           }
         });
       }
     });
-}));
+  }));
+  app.use('/photo_gallery', photoGalleryRouter);
+  app.use('/users', userRouter);
+  
+  app.get('/', (req,res) => {
+    return Photo.fetchAll()
+    .then(photo => {
+      const photoObj = photo.toJSON();
+      //  console.log({photoObj})
+    res.render('galleries/home',{photoObj})
+  })
+  .catch(err => console.log(err))
+});
 
 app.get('/register', (req, res) => {
   res.redirect('/register.html')
 });
 
-app.post('/register', (req, res)=> {
-  
-  bcrypt.genSalt(saltRounds, function(err, salt){
-    bcrypt.hash(req.body.password, salt, function(err, hash){
-      new User ({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+app.post('/register', (req, res) => {
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.hash(req.body.password, salt, function (err, hash) {
+      new User({
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
         email: req.body.email,
         username: req.body.username,
         password: hash
       })
-      .save()
-      .then((user) => {
-        console.log(user);
-        res.redirect('/home');
-      })
+        .save()
+        .then((user) => {
+          console.log(user);
+          res.redirect('/users');
+        })
     });
   });
 });
@@ -108,34 +121,36 @@ app.post('/register', passport.authenticate('local', {
 
 
 
-
+app.get('/login.html', (req, res) => {
+  res.redirect('/login.html')
+});
 
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/views/galleries/edit',
+  successRedirect: '/users/home',
   failureRedirect: '/login.html'
 }));
 
 
 app.get('/secret', utility.isAuthenticated, (req, res) => {
   const { user } = req;//the preferred way to deconstruct an object into a variable
-  console.log('user')
+  //console.log('user')
   const userObj = user.serialize();
-  console.log(userObj)
+  //console.log(userObj)
   //res.redirect('/views/galleries/detail')
   res.send(`You have access to Photo Gallery ${userObj.username}`)
 });
 
 app.get('/edit', utility.hasAdminAccess, (req, res) => {
+  console.log('here')
   const user = req.user;
   const userObj = user.serialize();
   // res.send(`You have admin access ${user.username}.`);
-  res.redirect('./views/galleries/edit')
-
+  res.redirect('/views/galleries/edit')
 })
 
 app.listen(PORT, () => {
   console.log(`Server listening on PORT ${PORT}`);
-})
+});
 module.exports = app;
 
 // app.use('/photo_gallery', photoGalleryRouter)
