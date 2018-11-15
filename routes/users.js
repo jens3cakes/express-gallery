@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../db/models/User');
+const utility = require('../utilities/auth');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -59,7 +60,8 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const data = req.body;
-  if (id !== data.id) {
+  console.log(data)
+  if (id !== parseInt(data.id)) {
     return res.status(404).json({ message: `Cannot update user ${id} due to data` })
   }
   return new User()
@@ -72,8 +74,8 @@ router.put('/:id', (req, res) => {
       if (user) {
         return user.save(
           {
-            first_name: data.first_name,
-            last_name: data.last_name,
+            first_name: data.firstName,
+            last_name: data.lastName,
             email: data.email
           },
           { patch: true }
@@ -87,7 +89,7 @@ router.put('/:id', (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', utility.isAuthenticated, (req, res) => {
   let data = req.params.id;
   return new User().where({ id: parseInt(data) })
     .fetch({

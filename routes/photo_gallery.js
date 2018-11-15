@@ -1,9 +1,15 @@
 const express = require('express')
 const Photo = require('../db/models/Photo');
+const utility = require('../utilities/auth')
 const router = express.Router();
 
-router.get('/new', (req, res) => {
-  res.render('galleries/new')
+router.get('/:id/new', (req, res) => {
+  const id = parseInt(req.params.id);
+  console.log(req.body)
+  if(id !== req.user.id){
+    return res.redirect('/login')
+  }
+  return res.render('galleries/new')
 })
 
 router.post('/new', (req, res) => {

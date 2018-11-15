@@ -3,6 +3,8 @@
 <ul>
   {{#each posts}}
   <li>{{author}}</li>
+  <a href="{{id}}/edit"><button>Edit Users</button></a>
+  <a href="/photo_gallery/{{id}}/new"><button>Add Photo</button></a>
   <li><a href="{{link}}"><img src="{{link}}" alt="" srcset=""></a></li>
   {{/each}}
 </ul>

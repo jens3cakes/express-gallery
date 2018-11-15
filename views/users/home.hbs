@@ -16,8 +16,7 @@
   <div class="photoDiv">
     <ul>
       {{#each users}}
-      <a href="{{id}}/edit"><button>Edit</button></a>
-      <li class="firstName">{{first_name}}</li>
+      <a href="/users/{{id}}"><li class="firstName">{{first_name}}</li></a>
       <li class="lastName">{{last_name}}</li>
       <ul class="photos">
         {{#each posts}}
